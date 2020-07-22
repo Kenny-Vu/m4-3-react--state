@@ -9,7 +9,10 @@ import Typeahead from "./Typeahead";
 
 const Wrapper = styled.div`
    {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     padding: 0.5rem;
     margin: 0.5rem;
   }

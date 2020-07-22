@@ -6,7 +6,7 @@ const Input = styled.input`
     border-radius: 4px;
     border: thin solid;
     height: 2.5rem;
-    width: 300px;
+    width: 500px;
     padding: 0.25rem;
     font-size: 1.25rem;
   }
@@ -22,16 +22,45 @@ const Button = styled.button`
   font-size: 1.25rem;
   padding: 0.5rem;
 `;
+const Suggestions = styled.ul`
+   {
+    padding: 0.5rem 0;
+  }
+  li {
+    background-color: #f0f8ff;
+    padding: 0.5rem;
+  }
+  li:hover {
+    background-color: #fffff4;
+  }
+`;
 
-const Typeahead = ({ data, handleSelect }) => {
-  const [value, setValue] = useState("");
+const Typeahead = ({ suggestions, handleSelect }) => {
+  const [entry, setEntry] = useState("");
+  let matchedSuggestions = suggestions.filter((book) => {
+    //only activate the typeAhead if user typed at least 2 characters
+    if (entry.length > 1) {
+      return book.title.toLowerCase().includes(entry.toLowerCase());
+    }
+  });
+
   return (
     <>
-      <Input
-        value={value}
-        onChange={(event) => setValue(event.target.value)}
-      ></Input>
-      <Button onClick={() => setValue("")}>Clear</Button>
+      <div>
+        <Input
+          value={entry}
+          onChange={(event) => setEntry(event.target.value)}
+          onKeyDown={(event) => event.key === "Enter" && handleSelect()}
+        ></Input>
+        <Button onClick={() => setEntry("")}>Clear</Button>
+        <div>
+          <Suggestions>
+            {matchedSuggestions.map((match) => {
+              return <li onClick={handleSelect}>{match.title}</li>;
+            })}
+          </Suggestions>
+        </div>
+      </div>
     </>
   );
 };
