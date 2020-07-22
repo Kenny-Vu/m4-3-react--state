@@ -33,6 +33,9 @@ const Suggestions = styled.ul`
   li:hover {
     background-color: #fffff4;
   }
+  li span {
+    font-weight: bold;
+  }
 `;
 
 const Typeahead = ({ suggestions, handleSelect }) => {
@@ -57,7 +60,15 @@ const Typeahead = ({ suggestions, handleSelect }) => {
           {matchedSuggestions.length > 0 && (
             <Suggestions>
               {matchedSuggestions.map((match) => {
-                return <li onClick={handleSelect}>{match.title}</li>;
+                let index = match.title.search(entry);
+                let firstHalf = match.title.slice(0, index + 1 + entry.length);
+                let secondHalf = match.title.slice(index + 1 + entry.length);
+                return (
+                  <li onClick={handleSelect}>
+                    {firstHalf}
+                    <span>{secondHalf}</span>
+                  </li>
+                );
               })}
             </Suggestions>
           )}
