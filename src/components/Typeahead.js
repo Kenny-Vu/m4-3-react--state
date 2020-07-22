@@ -25,9 +25,9 @@ const Button = styled.button`
 const Suggestions = styled.ul`
    {
     padding: 0.5rem 0;
+    box-shadow: 0 0 4px grey;
   }
   li {
-    background-color: #f0f8ff;
     padding: 0.5rem;
   }
   li:hover {
@@ -54,11 +54,13 @@ const Typeahead = ({ suggestions, handleSelect }) => {
         ></Input>
         <Button onClick={() => setEntry("")}>Clear</Button>
         <div>
-          <Suggestions>
-            {matchedSuggestions.map((match) => {
-              return <li onClick={handleSelect}>{match.title}</li>;
-            })}
-          </Suggestions>
+          {matchedSuggestions.length > 0 && (
+            <Suggestions>
+              {matchedSuggestions.map((match) => {
+                return <li onClick={handleSelect}>{match.title}</li>;
+              })}
+            </Suggestions>
+          )}
         </div>
       </div>
     </>
