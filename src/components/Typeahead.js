@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
+//STYLING
 const Input = styled.input`
-   {
-    border-radius: 4px;
-    border: thin solid;
-    height: 2.5rem;
-    width: 500px;
-    padding: 0.25rem;
-    font-size: 1.25rem;
-  }
+  border-radius: 4px;
+  border: thin solid;
+  height: 2.5rem;
+  width: 500px;
+  padding: 0.25rem;
+  font-size: 1.25rem;
 `;
 const Button = styled.button`
   height: 2.5rem;
@@ -23,23 +22,23 @@ const Button = styled.button`
   padding: 0.5rem;
 `;
 const Suggestions = styled.ul`
-   {
-    padding: 0.5rem 0;
-    box-shadow: 0 0 4px grey;
-  }
+  padding: 0.5rem 0;
+  box-shadow: 0 0 4px grey;
+
   li {
     padding: 0.5rem;
-  }
-  li:hover {
-    background-color: #fffff4;
   }
   li span {
     font-weight: bold;
   }
 `;
 
+//COMPONENT
 const Typeahead = ({ suggestions, handleSelect }) => {
   const [entry, setEntry] = useState("");
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = React.useState(
+    -1
+  );
   let matchedSuggestions = suggestions.filter((book) => {
     //only activate the typeAhead if user typed at least 2 characters
     if (entry.length > 1) {
@@ -53,18 +52,47 @@ const Typeahead = ({ suggestions, handleSelect }) => {
         <Input
           value={entry}
           onChange={(event) => setEntry(event.target.value)}
-          onKeyDown={(event) => event.key === "Enter" && handleSelect()}
+          onKeyDown={(event) => {
+            switch (event.key) {
+              case "Enter": {
+                handleSelect();
+                return;
+              }
+              case "ArrowUp": {
+                setSelectedSuggestionIndex(selectedSuggestionIndex - 1);
+                return;
+              }
+              case "ArrowDown": {
+                setSelectedSuggestionIndex(selectedSuggestionIndex + 1);
+                return;
+              }
+            }
+          }}
         ></Input>
         <Button onClick={() => setEntry("")}>Clear</Button>
         <div>
           {matchedSuggestions.length > 0 && (
             <Suggestions>
-              {matchedSuggestions.map((match) => {
-                let index = match.title.search(entry);
-                let firstHalf = match.title.slice(0, index + 1 + entry.length);
-                let secondHalf = match.title.slice(index + 1 + entry.length);
+              {matchedSuggestions.map((match, index) => {
+                const firstHalf = match.title.slice(
+                  0,
+                  index + 1 + entry.length
+                );
+                const secondHalf = match.title.slice(index + 1 + entry.length);
+                const isSelected = index === selectedSuggestionIndex;
                 return (
-                  <li onClick={handleSelect}>
+                  <li
+                    key={match.id}
+                    onClick={handleSelect}
+                    onMouseEnter={(event) => {
+                      setSelectedSuggestionIndex(index);
+                    }}
+                    style={
+                      isSelected
+                        ? { backgroundColor: "hsla(50deg,100%,80%,0.25)" }
+                        : { backgroundColor: "" }
+                    }
+                  >
                     {firstHalf}
                     <span>{secondHalf}</span>
                   </li>

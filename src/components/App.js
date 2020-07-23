@@ -8,14 +8,12 @@ import data from "../data";
 import Typeahead from "./Typeahead";
 
 const Wrapper = styled.div`
-   {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 0.5rem;
-    margin: 0.5rem;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0.5rem;
+  margin: 0.5rem;
 `;
 
 const App = (props) => {
